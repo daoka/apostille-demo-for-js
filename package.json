@@ -1,0 +1,16 @@
+{
+  "name": "apostille-for",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kazuya Okada <daoka@opening-line.co.jp> (https://www.opening-line.co.jp)",
+  "license": "ISC",
+  "dependencies": {
+    "rxjs": "^6.5.3",
+    "simple-apostille-v2": "^0.3.0",
+    "symbol-sdk": "^0.21.0"
+  }
+}
