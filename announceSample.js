@@ -8,7 +8,7 @@ const ownerKey = '3E04C96EBAE99124A1D388B05EBD007AA06CB917E09CA08F5859B3ADC49A14
 const networkType = symbolSdk.NetworkType.TEST_NET;
 const account = symbolSdk.Account.createFromPrivateKey(ownerKey, networkType);
 
-const apiEndpoint = 'https://sym-test.opening-line.jp:3001';
+const apiEndpoint = 'https://sym-test-01.opening-line.jp:3001';
 const generationHash = '6C1B92391CCB41C96478471C2634C111D9E989DECD66130C0430B5B8D20117CD';
 const feeMultiplier = 1000;
 

@@ -1,8 +1,7 @@
 # Apostille Demo for JS
-
-# How to Run
+## How to Run
 
 ```
 % npm install
-% node sample.js
+% node announce.js
 ```
