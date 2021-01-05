@@ -18,43 +18,45 @@ const repositoryFactory = new symbolSdk.RepositoryFactoryHttp(
 );
 
 const transactionRepo = repositoryFactory.createTransactionRepository();
+const receiptRepo = repositoryFactory.createReceiptRepository();
 const listener = repositoryFactory.createListener();
 
-const apostilleTransaction = apostilleLib.ApostilleTransaction.createFromData(
-  data,
-  apostilleLib.HashingType.Type.sha256,
-  seed,
-  account,
-  networkType,
-  generationHash,
-  feeMultiplier,
-  apiEndpoint
-);
+repositoryFactory.getEpochAdjustment().subscribe((adjustment) => {
+  const apostilleTx = apostilleLib.ApostilleTransaction.createFromData(
+    data,
+    apostilleLib.HashingType.Type.sha256,
+    seed,
+    account,
+    networkType,
+    generationHash,
+    feeMultiplier,
+    apiEndpoint,
+    adjustment,
+  );
+  apostilleTx.singedTransactionAndAnnounceType().then((info) => {
+    const signedTx = info.signedTransaction;
+    console.log(`txHash: ${signedTx.hash}`);
+    listener.open().then(() => {
+      listener.confirmed(account.address, signedTx.hash).subscribe((x) => {
+        console.log(x);
+        listener.close();
+      }, (err) => {
+        console.error(err);
+      });
 
-apostilleTransaction.singedTransactionAndAnnounceType().then((info) => {
-  const signedTx = info.signedTransaction;
-  console.log(signedTx.hash);
-  listener.open().then(() => {
-    
-    listener.unconfirmedAdded(account.address, signedTx.hash).subscribe((x) => {
-      console.log(x);
-      listener.close();
-    }, (err) => {
-      console.error(err);
-    });
+      listener.status(account.address, signedTx.hash).subscribe((x) => {
+        console.log(x);
+        listener.close();
+      }, (err) => {
+        console.error(err);
+        listener.close();
+      });
 
-    listener.status(account.address, signedTx.hash).subscribe((x) => {
-      console.log(x);
-      listener.close();
-    }, (err) => {
-      console.error(err);
-      listener.close();
-    });
-    
-    transactionRepo.announce(signedTx).subscribe((x) => {
-      console.log(x);
-    }, (err) => {
-      console.error(err);
+      transactionRepo.announce(signedTx).subscribe((x) => {
+        console.log(x);
+      }, (err) => {
+        console.error(err);
+      });
     });
   });
 });
